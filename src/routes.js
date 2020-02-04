@@ -14,6 +14,7 @@ const routes = new Router();
 const upload = multer(multerConfig);
 
 routes.post('/users', UserController.store);
+routes.get('/users', UserController.index);
 
 routes.post('/sessions', SessionController.store);
 
@@ -26,5 +27,6 @@ routes.get('/providers', ProviderController.index);
 routes.post('/files', upload.single('file'), FileController.store);
 
 routes.post('/appointments', AppointmentController.store);
+routes.get('/appointments', AppointmentController.index);
 
 export default routes;
