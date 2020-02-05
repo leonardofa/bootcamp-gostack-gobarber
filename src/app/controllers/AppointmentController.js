@@ -1,8 +1,10 @@
 import * as Yup from 'yup';
-import { startOfHour, parseISO, isBefore } from 'date-fns';
-import Appointment from '../models/Appointment';
+import { startOfHour, parseISO, isBefore, format } from 'date-fns';
+import pt from 'date-fns/locale/pt-BR';
 import User from '../models/User';
 import File from '../models/File';
+import Appointment from '../models/Appointment';
+import Notification from '../schemas/Notification';
 
 class AppointmentController {
   async store(req, res) {
@@ -54,6 +56,22 @@ class AppointmentController {
       date: hourStart,
     });
 
+    /**
+     * Notify appointment provider
+     */
+
+    const user = await User.findByPk(req.idUser);
+    const formattedDate = format(
+      hourStart,
+      "'dia' dd 'de' MMMM', às' H:mm'h'",
+      { locale: pt }
+    );
+
+    await Notification.create({
+      content: `Novo agendamento de ${user.name} para ${formattedDate}`,
+      user: provider_id,
+    });
+
     return res.json(appointment);
   }
 
@@ -78,6 +96,16 @@ class AppointmentController {
       ],
     });
     return res.json(appointments);
+  }
+
+  async delete(req, res) {
+    const { id } = req.params;
+    const appointment = await Appointment.findByPk(id);
+    if (!appointment) {
+      return res.status(404).json({ error: 'Appointment not found' });
+    }
+    await appointment.destroy();
+    return res.json({ result: 'delete' });
   }
 }
 
