@@ -1,8 +1,12 @@
 {
-  "name": "modulo02",
+  "name": "bootcamp-gostack-gobarber",
   "version": "1.0.0",
+  "description": "Repositório para estudo da tecnologia Node",
   "main": "index.js",
+  "repository": "https://github.com/leonardofa/bootcamp-gostack-gobarber.git",
+  "author": "Leonardo Ferreira Alves <leonardofa@gmail.com>",
   "license": "MIT",
+  "private": false,
   "scripts": {
     "dev": "nodemon src/server.js",
     "dev:debug": " nodemon --inspect src/server.js",
